@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ge10_team04.web_snippet" model="ir.asset">
+            <field name="name">Web Snippet</field>
+            <field name="bundle">web.assets_frontend</field>
+            <field name="path">ge10_team04/static/src/js/sum_mileage.js</field>
+        </record>
+        <template id="mileage_snippet_template" name="mileage snippet template" inherit_id="website.snippets" >
+            <xpath expr="//div[@id='snippet_effect']/div[hasclass('o_panel_body')]" position="inside">
+                <t t-snippet="ge10_team04.mileage_snippet"/> 
+            </xpath>
+        </template>
+        <template t-name="mileage_snippet" name="Mileage Counter">
+            <section>
+                <div class="container card pt48 pb48">
+                    <div class="col card-body">
+                        <div class="row text-center card-title bg-light">
+                            <h2>Amount of miles covered by Kawii'l motorcycles</h2>
+                        </div>
+                        <div class="row text-center card-text bg-light">
+                            <h1><label id="mileage_sum">nnn,nnn.n</label></h1>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </template>
+    </data>
+</odoo>
