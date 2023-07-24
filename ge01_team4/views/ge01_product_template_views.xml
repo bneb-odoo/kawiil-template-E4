@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record model="ir.ui.view" id="product_view_inherit_ge01" >
+        <field name="name">product.view.inherit.ge01</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after"> 
+               <filter name="motorcycles" string="Motorcycles" domain="[('detailed_type', '=' ,'motorcycle')]"/>
+            </xpath>
+        </field>
+       </record>
+    </data>
+</odoo>
