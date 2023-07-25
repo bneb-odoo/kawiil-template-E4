@@ -17,6 +17,6 @@ class SaleOrder(models.Model):
             
     def add_discount(self):
         for order in self:
-            new_customer_pricelist = self.env['product.pricelist'].search([('name','=','New Customer (MXN)')])
-            order.pricelist_id = new_customer_pricelist[0].id
+            new_customer_pricelist = self.env.ref('ge04_team04.new_customer_pricelist')
+            order.pricelist_id = new_customer_pricelist.id
             order.action_update_prices()
