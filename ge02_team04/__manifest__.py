@@ -3,9 +3,9 @@
     "summary": "Map View extension for Motorcycle Registry",
     "description": """ 
     Motorcycle Registry : Map View \n
+    This module adds a map view to the registry action window of the Motorcycle Registry Module. \n
     Task id: 3426889 \n
-    Dev: team4 \n
-    This module adds a map view to de registry action window of the Motorcycle Registry Module.""",
+    Dev: team4""",
     "version": "0.1",
     "category": "Kauil/Registry",
     "license": "OPL-1",
