@@ -10,7 +10,7 @@
     "category": "Kauil/Registry",
     "license": "OPL-1",
     "depends": ["motorcycle_registry", "sale"],
-    "data": ["views/sale_order_inherit.xml",],
+    "data": ["views/sale_order_inherit.xml","data/product_data.xml"],
     "demo": [],
     "author": "Odoo, Inc",
     "website": "www.odoo.com",

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="1">
+        <record id="new_customer_pricelist" model="product.pricelist">
+            <field name="name">New Customer (MXN)</field>
+            <field name="currency_id">33</field>
+        </record>
+        <record id="product_pricelist" model="product.pricelist.item">
+            <field name="name">New customer discount</field>
+            <field name="pricelist_id" ref="new_customer_pricelist"></field>
+            <field name="active">True</field>
+            <field name="applied_on">3_global</field>
+            <field name="compute_price">fixed</field>
+            <field name="fixed_price">2500.00</field>
+            <field name="min_quantity">0.0</field>
+            <field name="currency_id">33</field>
+        </record>
+    </data>
+</odoo>
