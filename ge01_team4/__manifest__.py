@@ -4,6 +4,7 @@
     "description": """Filters the products page to show products that are a motorcycle type 
     Task Id:342602 Dev: Odoo Team 4""",
    'license': 'OPL-1',
+   'version': '0.1',
     'data': [
     'views/ge01_product_template_views.xml',
     ],
