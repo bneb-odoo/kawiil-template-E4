@@ -16,5 +16,7 @@ class SaleOrder(models.Model):
                 order.is_new_customer = False
             
     def add_discount(self):
-        # Write the discount function here
-        print("Hey")
+        for order in self:
+            new_customer_pricelist = self.env['product.pricelist'].search([('name','=','New Customer (MXN)')])
+            order.pricelist_id = new_customer_pricelist[0].id
+            order.action_update_prices()
