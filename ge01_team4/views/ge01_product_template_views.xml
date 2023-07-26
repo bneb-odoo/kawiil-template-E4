@@ -12,4 +12,7 @@
         </field>
        </record>
     </data>
+    <record id="sale.product_template_action" model="ir.actions.act_window" >
+            <field name="context">{"search_default_motorcycles":1}</field>
+    </record>
 </odoo>
