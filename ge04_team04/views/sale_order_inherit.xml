@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//header/button[@name='action_draft']" position="after">
                 <field name="is_new_customer" invisible='1'/>
-                <button name="add_discount" string="Appy Discount" type="object" attrs="{'invisible':[('is_new_customer','=', False)]} "/>
+                <button name="add_discount" string="Apply Discount" type="object" attrs="{'invisible':[('is_new_customer','=', False)]} "/>
             </xpath>
         </field>
     </record>
