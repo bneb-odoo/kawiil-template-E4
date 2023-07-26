@@ -10,6 +10,6 @@ class ProductTemplate(models.Model):
         for product in self:
             if product.detailed_type == 'motorcycle':
                 name_parts = [part for part in [product.make, product.model, str(product.year)] if part]
-                product.name = ' '.join(name_parts) if name_parts else False
+                product.name = ''.join(name_parts) if name_parts else False
             else:
                 product.name = product.name if product.name else False
