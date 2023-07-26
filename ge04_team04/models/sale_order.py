@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     def _compute_is_new_customer(self):
         for order in self:
             if order.partner_id:
-                sale_orders_from_customer = self.env['sale.order.line'].search([('product_type','=','motorcycle'),('order_partner_id','=',order.partner_id.id),('state','=','sale')])
+                sale_orders_from_customer = self.env['sale.order.line'].search([('product_type','=','motorcycle'),('order_partner_id','=',order.partner_id.id),('state','in',['sale', 'done'])])
                 order.is_new_customer = False if sale_orders_from_customer else True
             else:
                 order.is_new_customer = False
