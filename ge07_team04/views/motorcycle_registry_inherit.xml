@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="motorcycle_registry_tree_inherit_motorcycle_registry" model="ir.ui.view">
+        <field name="name">motorcycle.registry.tree.inherit.motorcycle.registry</field>
+        <field name="model">motorcycle.registry</field>
+        <field name="inherit_id" ref="motorcycle_registry.motorcycle_registry_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vin']" position="after">
+                <field name="stock_lot_id"/>
+            </xpath>
+    </field>
+    </record>
+</odoo>
