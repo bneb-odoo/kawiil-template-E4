@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_home_menu_repair" name="Portal Breadcrumbs : repair" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'maintenance_requests' or page_name == 'new_maintenance_request' or repair" t-attf-class="breadcrumb-item #{'active ' if not repair else ''}">
+                <a t-if="repair or page_name == 'new_maintenance_request'" t-attf-href="/my/maintenance_requests?{{ keep_query() }}">Maintenance Requests</a>
+                <t t-else="">Maintenance Requests</t>
+            </li>
+            <li t-if="repair" class="breadcrumb-item active">
+                <t t-out="repair.name"/>
+            </li>
+            <li t-if="page_name == 'new_maintenance_request'" class="breadcrumb-item active">
+                New
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_repair" name="Show Maintenance Requests" customize_show="True" inherit_id="portal.portal_my_home" priority="2">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Maintenance Requests</t>
+                <t t-set="url" t-value="'/my/maintenance_requests'"/>
+                <t t-set="placeholder_count" t-value="'maintenance_requests_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_repair" name="Maintenance Requests">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Maintenance Requests</t>
+                <a class="btn btn-primary btn-sm" t-attf-href="/my/maintenance_requests/new">New request</a>
+            </t>
+            <t t-if="repairs" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Name</th>
+                        <th class="text-end">Motorcycle</th>
+                        <th class="text-end">VIN</th>
+                        <th class="text-end">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="repairs" t-as="repair">
+                    <tr>
+                        <td><a t-att-href="repair.get_portal_url()"><t t-out="repair.name"/></a></td>
+                        <td class="text-end">
+                            <span t-field="repair.product_id.product_tmpl_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="repair.lot_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-if="repair.state == 'done'" class="badge rounded-pill text-bg-success">
+                              <span t-field="repair.state"/>
+                            </span>
+                            <span t-elif="repair.state == 'cancel'" class="badge rounded-pill text-bg-danger">
+                              <span t-field="repair.state"/>
+                            </span>
+                            <span t-elif="repair.state == 'under_repair'" class="badge rounded-pill text-bg-warning">
+                              <span t-field="repair.state"/>
+                            </span>
+                            <span t-else="" class="badge rounded-pill text-bg-info">
+                              <span t-field="repair.state"/>
+                            </span>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no maintennace requests for your account.</p>
+        </t>
+    </template>
+
+    <template id="repair_portal_template" name="Repair Portal Template" inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <div class="row mt16 o_portal_reapir_sidebar">
+                <t t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+
+                    <t t-set="title">
+                        <h2 class="mb-0"><b t-field="repair.amount_total" t-options='{"widget": "monetary"}'/> </h2>
+                    </t>
+                    <t t-set="entries">
+                        <ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+                            <li class="list-group-item flex-grow-1">
+                                <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+                                    <!-- Download and Print actions -->
+                                    <div class="btn-group flex-grow-1 me-1 mb-1">
+                                        <a class="btn btn-secondary o_download_btn" t-att-href="" title="Download"><i class="fa fa-download"/> Download</a>
+                                    </div>
+                                    <div class="btn-group flex-grow-1 mb-1">
+                                        <a class="btn btn-secondary o_print_btn o_portal_invoice_print" t-att-href="" id="print_repair_order" title="Print" target="_blank"><i class="fa fa-print"/> Print</a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="navspy list-group-item ps-0 flex-grow-1" t-ignore="true" role="complementary">
+                                <ul class="nav flex-column bs-sidenav"></ul>
+                            </li>
+                        </ul>
+                    </t>
+                </t>
+
+                <div id="repair_content" class="col-12 col-lg justify-content-end">
+                    <div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}" id="portal_repair_content">
+                        <div t-call="ge11_team04.repair_portal_content"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="repair_portal_content" name="Repair Portal Content">
+        <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+            <h2 class="my-0">
+                Request: 
+                <em t-esc="repair.name"/>
+            </h2>
+        </div>
+        <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+            <div id="informations">
+                <div class="mb-3">
+                    <span t-if="repair.state == 'done'" class="badge rounded-pill text-bg-success">
+                        <span t-field="repair.state"/>
+                    </span>
+                    <span t-elif="repair.state == 'cancel'" class="badge rounded-pill text-bg-danger">
+                        <span t-field="repair.state"/>
+                    </span>
+                    <span t-elif="repair.state == 'under_repair'" class="badge rounded-pill text-bg-warning">
+                        <span t-field="repair.state"/>
+                    </span>
+                    <span t-else="" class="badge rounded-pill text-bg-info" >
+                        <span t-field="repair.state"/>
+                    </span>
+                </div>
+                <div class="row" id="r_sh_date">
+                    <div class="mb-3 col-6">
+                    <strong>Scheduled Date: </strong>
+                    <span t-field="repair.schedule_date" t-options='{"widget": "date"}'/>
+                    </div>
+                </div>
+                <div class="row" id="r_desc">
+                    <strong>Description: </strong>
+                    <span t-field="repair.description"/>
+                </div>
+            </div>
+
+            <section id="details" style="page-break-inside: auto;" class="mt32">
+                <h3 id="details">Pricing</h3>
+
+                <div class="table-responsive">
+                    <table class="table table-sm" id="repair_table">
+                        <thead class="bg-100">
+                            <tr>
+                                <th class="text-start" id="product_name_header">Product</th>
+                                <th t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                    <span>Taxes</span>
+                                </th>
+                                <th class="text-end" >
+                                    <span>Amount</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="repair_tbody">
+                            <td id="product_name">
+                                <span t-field="repair.product_id.product_tmpl_id.name"/>
+                            </td>
+                            <td t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                <t t-foreach="repair.operations" t-as="fee">
+                                    <span t-out="', '.join(map(lambda x: (x.description or x.name), fee.tax_id))"/>
+                                </t>
+                            </td>
+                            <td class="text-end">
+                                <span t-field="repair.amount_total" t-options='{"widget": "monetary"}'/>
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="total" class="row" name="total" style="page-break-inside: avoid;">
+                    <div class="col-sm-7 col-md-6 ms-auto">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr class="border-black o_subtotal">
+                                    <td><strong>Untaxed Amount</strong></td>
+
+                                    <td class="text-end">
+                                        <span t-field="repair.amount_untaxed" t-options='{"widget": "monetary"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <t t-foreach="repair.operations" t-as="fee">
+                                            <span t-out="', '.join(map(lambda x: (x.description or x.name), fee.tax_id))"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-end o_price_total">
+                                        <span t-field="repair.amount_tax" t-options='{"widget": "monetary"}'/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black o_total">
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-end">
+                                        <span t-field="repair.amount_total" t-options='{"widget": "monetary"}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </template>
+
+    <template id="new_repair" name="New Maintenance Request" inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <div class="row mt16 o_portal_repair_sidebar">
+                <div id="registry_content" class="col-12 col-lg justify-content-end">
+                    <div id="portal_registry_content">
+                        <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+                            <h4 class="my-0">
+                                New Maintenance Request 
+                            </h4>
+                        </div>
+                        <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+                            <div id="informations">
+                                <form t-attf-action="/my/maintenance_requests/new/submit" method="post" role="form" class="o_wprofile_editor_form js_website_submit_form" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="row">
+                                        <div class="col-md mb-3">
+                                            <label for="products" class="form-label">Product:</label>
+                                            <select class="form-select" name="product">
+                                                <option>Select a product to repair</option>
+                                                <t t-foreach="products" t-as="product">
+                                                    <option t-att-value="product.id"><t t-out="product.product_tmpl_id.name"/></option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                        <div class="col-md mb-3">
+                                            <label for="vin" class="form-label">VIN</label>
+                                            <input type="text" class="form-control" name="vin" id="vin" required="True"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="desc" class="form-label">Description: </label>
+                                        <textarea class="form-control" name="desc" id="desc" required="True" rows="3"/>
+                                    </div>
+                                    <div class="row">
+                                    <div class="col"><button type="submit" class="btn btn-primary float-end">Create</button></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
