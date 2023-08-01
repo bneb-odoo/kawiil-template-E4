@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_home_menu_motorcycle_registry" name="Portal Breadcrumbs : motorcycle registry" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'motorcycle_registry' or registry" t-attf-class="breadcrumb-item #{'active ' if not registry else ''}">
+                <a t-if="registry" t-attf-href="">Motorcycle Registries</a>
+                <t t-else="">Motorcycle Registries</t>
+            </li>
+            <li t-if="registry" class="breadcrumb-item active">
+                <t t-out="registry.registry_number"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_sale_motorcycle_registry" name="Show Motorcycle Registries" customize_show="True" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Motorcycle Registries</t>
+                <t t-set="url" t-value="'/my/registries'"/>
+                <t t-set="placeholder_count" t-value="'motorcycle_registry_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_motorcycle_registries" name="Motorcycle Registries">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Motorcycle Registries</t>
+            </t>
+            <t t-if="registries" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Registry #</th>
+                        <th class="text-end">Country</th>
+                        <th class="text-end">Country</th>
+                        <th class="text-end">State</th>
+                        <th class="text-end">VIN</th>
+                    </tr>
+                </thead>
+                <t t-foreach="registries" t-as="registry">
+                    <tr>
+                        <td><a t-att-href="registry.get_portal_url()"><t t-out="registry.registry_number"/></a></td>
+                        <td class="text-end"><span t-field="registry.owner_id.name"/></td>
+                        <td class="text-end"><span t-field="registry.owner_id.country_id.name"/></td>
+                        <td class="text-end"><span t-field="registry.owner_id.state_id.name"/></td>
+                        <td class="text-end"><span t-field="registry.vin"/></td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no motorcycle registries for your account.</p>
+        </t>
+    </template>
+
+    <template id="motorcycle_registry_portal_template" name="Motorcycle Registry Portal Template" inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <div class="row mt16 o_portal_registry_sidebar">
+                <div id="registry_content" class="col-12 col-lg justify-content-end">
+                    <div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}" id="portal_registry_content">
+                        <div t-call="ge08_team04.motorcycle_registry_portal_content"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="motorcycle_registry_portal_content" name="Motorcycle Registry Portal Content">
+
+        <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+            <h2 class="my-0">
+                <t t-out="registry.registry_number"/>
+            </h2>
+        </div>
+
+        <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+            <div class="row" id="informations">
+                <div class="col-md-5"><img class="img-fluid" t-attf-src="data:image/*;base64,{{registry.picture}}"/></div>
+                <div class="col">
+                    <div class="row" id="r_date">
+                        <div class="mb-3 col-lg-6">
+                            <strong>Registration Date: </strong><span t-field="registry.registry_date" t-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+                    <div class="row" id="owner_information">
+                        <div class="col-lg-6">
+                            <strong class="d-block mb-1">Owner: </strong>
+                            <address t-field="registry.owner_id"
+                                t-options='{"widget": "contact", "fields": ["name", "email"], "no_marker": True}'/>
+                        </div>
+                    </div>
+                    <div class="row" id="owner_information">
+                        <div class="mb-3 col-lg-6">
+                            <strong class="d-block mb-1">VIN: </strong>
+                            <span t-field="registry.vin"/>
+                        </div>
+                    </div>
+                    <div class="row" id="owner_information">
+                        <div class="mb-3 col-lg-6">
+                            <strong class="d-block mb-1">Current Mileage: </strong>
+                            <span t-field="registry.current_mileage"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</odoo>
