@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.actions.act_window" id="motorcycle_registry.registry_list_action">
+        <field name="name">Registry</field>
+        <field name="res_model">motorcycle.registry</field>
+        <field name="view_mode">tree,form,map</field>
+    </record>
+
+    <record id="motorcycle_registry_view_map" model="ir.ui.view">
+        <field name="name">motorcycle.registry.view.map</field>
+        <field name="model">motorcycle.registry</field>
+        <field name="arch" type="xml">
+            <map res_partner="owner_id" routing="1">
+                <field name="owner_id" string="Owner"/>
+            </map>
+        </field>
+    </record>
+
+</odoo>
